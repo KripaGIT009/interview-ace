@@ -1,0 +1,239 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: interviewace-postgres
+    environment:
+      POSTGRES_USER: interviewace
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-interviewace123}
+      POSTGRES_MULTIPLE_DATABASES: auth_db,questions_db,interviews_db,users_db,payments_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-databases.sh:/docker-entrypoint-initdb.d/init-databases.sh
+    networks:
+      - interviewace-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U interviewace"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis for Caching
+  redis:
+    image: redis:7-alpine
+    container_name: interviewace-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - interviewace-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Eureka Server
+  eureka-server:
+    build:
+      context: ./interviewace-backend/eureka-server
+      dockerfile: Dockerfile
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    networks:
+      - interviewace-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # Config Server
+  config-server:
+    build:
+      context: ./interviewace-backend/config-server
+      dockerfile: Dockerfile
+    container_name: config-server
+    ports:
+      - "8888:8888"
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+    networks:
+      - interviewace-network
+
+  # API Gateway
+  api-gateway:
+    build:
+      context: ./interviewace-backend/api-gateway
+      dockerfile: Dockerfile
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+      JWT_SECRET: ${JWT_SECRET:-your-secret-key-change-in-production}
+    networks:
+      - interviewace-network
+
+  # Auth Service
+  auth-service:
+    build:
+      context: ./interviewace-backend/auth-service
+      dockerfile: Dockerfile
+    container_name: auth-service
+    ports:
+      - "8081:8081"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/auth_db
+      SPRING_DATASOURCE_USERNAME: interviewace
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-interviewace123}
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+      JWT_SECRET: ${JWT_SECRET:-your-secret-key-change-in-production}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    networks:
+      - interviewace-network
+
+  # Question Service
+  question-service:
+    build:
+      context: ./interviewace-backend/question-service
+      dockerfile: Dockerfile
+    container_name: question-service
+    ports:
+      - "8082:8082"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/questions_db
+      SPRING_DATASOURCE_USERNAME: interviewace
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-interviewace123}
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+    networks:
+      - interviewace-network
+
+  # Interview Service
+  interview-service:
+    build:
+      context: ./interviewace-backend/interview-service
+      dockerfile: Dockerfile
+    container_name: interview-service
+    ports:
+      - "8083:8083"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/interviews_db
+      SPRING_DATASOURCE_USERNAME: interviewace
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-interviewace123}
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+    networks:
+      - interviewace-network
+
+  # User Service
+  user-service:
+    build:
+      context: ./interviewace-backend/user-service
+      dockerfile: Dockerfile
+    container_name: user-service
+    ports:
+      - "8084:8084"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/users_db
+      SPRING_DATASOURCE_USERNAME: interviewace
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-interviewace123}
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+    networks:
+      - interviewace-network
+
+  # AI Service (OpenAI & ElevenLabs)
+  ai-service:
+    build:
+      context: ./interviewace-backend/ai-service
+      dockerfile: Dockerfile
+    container_name: ai-service
+    ports:
+      - "8085:8085"
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      ELEVENLABS_API_KEY: ${ELEVENLABS_API_KEY}
+    networks:
+      - interviewace-network
+
+  # Payment Service (Stripe)
+  payment-service:
+    build:
+      context: ./interviewace-backend/payment-service
+      dockerfile: Dockerfile
+    container_name: payment-service
+    ports:
+      - "8086:8086"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/payments_db
+      SPRING_DATASOURCE_USERNAME: interviewace
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-interviewace123}
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET}
+    networks:
+      - interviewace-network
+
+  # React Frontend
+  react-frontend:
+    build:
+      context: ./interviewace-frontend
+      dockerfile: Dockerfile
+    container_name: react-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api-gateway
+    environment:
+      VITE_API_URL: http://localhost:8080/api
+    networks:
+      - interviewace-network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  interviewace-network:
+    driver: bridge

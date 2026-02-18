@@ -1,0 +1,37 @@
+server:
+  port: 8085
+
+spring:
+  application:
+    name: ai-service
+  cloud:
+    config:
+      enabled: false
+  codec:
+    max-in-memory-size: 10MB
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka/}
+    registerWithEureka: true
+    fetchRegistry: true
+  instance:
+    preferIpAddress: true
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+
+openai:
+  api:
+    key: ${OPENAI_API_KEY:your-openai-api-key}
+    url: https://api.openai.com/v1
+
+elevenlabs:
+  api:
+    key: ${ELEVENLABS_API_KEY:your-elevenlabs-api-key}
+    url: https://api.elevenlabs.io/v1
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
