@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from '../lib/api';
+import axios from '@/lib/api';
 import Editor from '@monaco-editor/react';
 
 interface Question {
@@ -10,7 +10,7 @@ interface Question {
   difficulty: 'EASY' | 'MEDIUM' | 'HARD';
   category: string;
   company: string;
-  hints: string[];
+  hints: string[] | string | null;
   sampleInput: string;
   sampleOutput: string;
   constraints: string;
@@ -42,10 +42,27 @@ export default function QuestionsPage() {
     applyFilters();
   }, [questions, filters]);
 
+  const normalizeHints = (value: Question['hints']): string[] => {
+    if (!value) {
+      return [];
+    }
+    if (Array.isArray(value)) {
+      return value.filter(Boolean);
+    }
+    return value
+      .split(/\r?\n|;+/)
+      .map((hint) => hint.trim())
+      .filter(Boolean);
+  };
+
   const fetchQuestions = async () => {
     try {
       const response = await axios.get('/questions');
-      setQuestions(response.data);
+      const normalized = response.data.map((question: Question) => ({
+        ...question,
+        hints: normalizeHints(question.hints),
+      }));
+      setQuestions(normalized);
       setLoading(false);
     } catch (error) {
       console.error('Failed to fetch questions:', error);
@@ -234,7 +251,7 @@ export default function QuestionsPage() {
                   </div>
                 </div>
 
-                {selectedQuestion.hints && selectedQuestion.hints.length > 0 && (
+                {Array.isArray(selectedQuestion.hints) && selectedQuestion.hints.length > 0 && (
                   <div>
                     <h3 className="font-semibold text-gray-900 mb-2">Hints</h3>
                     <ul className="list-disc list-inside space-y-1">

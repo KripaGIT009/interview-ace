@@ -1,22 +1,41 @@
--- Sample coding questions for InterviewAce
+-- Idempotent seed data for InterviewAce question catalog
 
-INSERT INTO questions (title, description, difficulty, category, company, hints, sample_input, sample_output, constraints, starter_code, time_limit, created_at) VALUES
-('Two Sum', 'Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target. You may assume that each input would have exactly one solution, and you may not use the same element twice.', 'EASY', 'ARRAYS', 'Google, Amazon, Facebook', 'Try using a hash map to store complements', '[2,7,11,15], target = 9', '[0,1]', '2 <= nums.length <= 10^4', 'function twoSum(nums, target) {\n  // Your code here\n}', 30, CURRENT_TIMESTAMP),
+INSERT INTO questions (title, description, difficulty, category, company, hints, sample_input, sample_output, constraints, starter_code, time_limit, created_at)
+SELECT 'Two Sum', 'Return indices of two numbers that add up to target.', 'EASY', 'ARRAYS', 'Google, Amazon, Facebook', 'Use a hash map for complements.', '[2,7,11,15], target=9', '[0,1]', '2 <= n <= 10^4', 'function twoSum(nums, target) {\n  // Your code here\n}', 30, CURRENT_TIMESTAMP
+WHERE NOT EXISTS (SELECT 1 FROM questions WHERE title = 'Two Sum');
 
-('Reverse Linked List', 'Given the head of a singly linked list, reverse the list, and return the reversed list.', 'EASY', 'LINKED_LISTS', 'Microsoft, Apple', 'Consider using iterative or recursive approach', 'head = [1,2,3,4,5]', '[5,4,3,2,1]', 'The number of nodes in the list is the range [0, 5000]', 'function reverseList(head) {\n  // Your code here\n}', 30, CURRENT_TIMESTAMP),
+INSERT INTO questions (title, description, difficulty, category, company, hints, sample_input, sample_output, constraints, starter_code, time_limit, created_at)
+SELECT 'Reverse Linked List', 'Reverse a singly linked list and return the new head.', 'EASY', 'LINKED_LISTS', 'Microsoft, Apple', 'Iterative pointer reversal works well.', 'head=[1,2,3,4,5]', '[5,4,3,2,1]', '0 <= nodes <= 5000', 'function reverseList(head) {\n  // Your code here\n}', 30, CURRENT_TIMESTAMP
+WHERE NOT EXISTS (SELECT 1 FROM questions WHERE title = 'Reverse Linked List');
 
-('Valid Parentheses', 'Given a string s containing just the characters ''('', '')'', ''{'', ''}'', ''['' and '']'', determine if the input string is valid. An input string is valid if: Open brackets must be closed by the same type of brackets. Open brackets must be closed in the correct order.', 'EASY', 'STACKS', 'Google, Bloomberg', 'Use a stack data structure', 's = "()[]{}"', 'true', '1 <= s.length <= 10^4', 'function isValid(s) {\n  // Your code here\n}', 30, CURRENT_TIMESTAMP),
+INSERT INTO questions (title, description, difficulty, category, company, hints, sample_input, sample_output, constraints, starter_code, time_limit, created_at)
+SELECT 'Valid Parentheses', 'Check whether brackets are closed in the correct order.', 'EASY', 'STACKS', 'Google, Bloomberg', 'Use a stack and match closing brackets.', 's="()[]{}"', 'true', '1 <= |s| <= 10^4', 'function isValid(s) {\n  // Your code here\n}', 30, CURRENT_TIMESTAMP
+WHERE NOT EXISTS (SELECT 1 FROM questions WHERE title = 'Valid Parentheses');
 
-('Maximum Subarray', 'Given an integer array nums, find the contiguous subarray (containing at least one number) which has the largest sum and return its sum.', 'MEDIUM', 'DYNAMIC_PROGRAMMING', 'Amazon, Netflix', 'Consider using Kadane''s algorithm', 'nums = [-2,1,-3,4,-1,2,1,-5,4]', '6', '-10^4 <= nums[i] <= 10^4', 'function maxSubArray(nums) {\n  // Your code here\n}', 45, CURRENT_TIMESTAMP),
+INSERT INTO questions (title, description, difficulty, category, company, hints, sample_input, sample_output, constraints, starter_code, time_limit, created_at)
+SELECT 'Maximum Subarray', 'Find the contiguous subarray with the largest sum.', 'MEDIUM', 'DYNAMIC_PROGRAMMING', 'Amazon, Netflix', 'Kadane''s algorithm gives O(n).', 'nums=[-2,1,-3,4,-1,2,1,-5,4]', '6', '-10^4 <= nums[i] <= 10^4', 'function maxSubArray(nums) {\n  // Your code here\n}', 45, CURRENT_TIMESTAMP
+WHERE NOT EXISTS (SELECT 1 FROM questions WHERE title = 'Maximum Subarray');
 
-('Binary Tree Level Order Traversal', 'Given the root of a binary tree, return the level order traversal of its nodes'' values. (i.e., from left to right, level by level).', 'MEDIUM', 'TREES', 'Facebook, Microsoft', 'Use BFS with a queue', 'root = [3,9,20,null,null,15,7]', '[[3],[9,20],[15,7]]', 'The number of nodes in the tree is in the range [0, 2000]', 'function levelOrder(root) {\n  // Your code here\n}', 45, CURRENT_TIMESTAMP),
+INSERT INTO questions (title, description, difficulty, category, company, hints, sample_input, sample_output, constraints, starter_code, time_limit, created_at)
+SELECT 'Binary Tree Level Order Traversal', 'Return node values level by level using BFS.', 'MEDIUM', 'TREES', 'Facebook, Microsoft', 'Queue-based BFS.', 'root=[3,9,20,null,null,15,7]', '[[3],[9,20],[15,7]]', '0 <= nodes <= 2000', 'function levelOrder(root) {\n  // Your code here\n}', 45, CURRENT_TIMESTAMP
+WHERE NOT EXISTS (SELECT 1 FROM questions WHERE title = 'Binary Tree Level Order Traversal');
 
-('Merge Intervals', 'Given an array of intervals where intervals[i] = [starti, endi], merge all overlapping intervals, and return an array of the non-overlapping intervals that cover all the intervals in the input.', 'MEDIUM', 'ARRAYS', 'Google, Facebook', 'Sort intervals by start time first', 'intervals = [[1,3],[2,6],[8,10],[15,18]]', '[[1,6],[8,10],[15,18]]', '1 <= intervals.length <= 10^4', 'function merge(intervals) {\n  // Your code here\n}', 45, CURRENT_TIMESTAMP),
+INSERT INTO questions (title, description, difficulty, category, company, hints, sample_input, sample_output, constraints, starter_code, time_limit, created_at)
+SELECT 'Merge Intervals', 'Merge overlapping intervals after sorting by start.', 'MEDIUM', 'ARRAYS', 'Google, Facebook', 'Sort by start then merge greedily.', '[[1,3],[2,6],[8,10],[15,18]]', '[[1,6],[8,10],[15,18]]', '1 <= intervals.length <= 10^4', 'function merge(intervals) {\n  // Your code here\n}', 45, CURRENT_TIMESTAMP
+WHERE NOT EXISTS (SELECT 1 FROM questions WHERE title = 'Merge Intervals');
 
-('Longest Palindromic Substring', 'Given a string s, return the longest palindromic substring in s.', 'MEDIUM', 'STRINGS', 'Amazon, Apple', 'Expand around centers or use dynamic programming', 's = "babad"', '"bab" or "aba"', '1 <= s.length <= 1000', 'function longestPalindrome(s) {\n  // Your code here\n}', 45, CURRENT_TIMESTAMP),
+INSERT INTO questions (title, description, difficulty, category, company, hints, sample_input, sample_output, constraints, starter_code, time_limit, created_at)
+SELECT 'Longest Palindromic Substring', 'Find the longest palindromic substring in s.', 'MEDIUM', 'STRINGS', 'Amazon, Apple', 'Expand around centers.', 's="babad"', '"bab" or "aba"', '1 <= |s| <= 1000', 'function longestPalindrome(s) {\n  // Your code here\n}', 45, CURRENT_TIMESTAMP
+WHERE NOT EXISTS (SELECT 1 FROM questions WHERE title = 'Longest Palindromic Substring');
 
-('Word Ladder', 'A transformation sequence from word beginWord to word endWord using a dictionary wordList is a sequence of words beginWord -> s1 -> s2 -> ... -> sk such that every adjacent pair of words differs by a single letter.', 'HARD', 'GRAPHS', 'Google, Amazon', 'Use BFS to find shortest path', 'beginWord = "hit", endWord = "cog", wordList = ["hot","dot","dog","lot","log","cog"]', '5', '1 <= beginWord.length <= 10', 'function ladderLength(beginWord, endWord, wordList) {\n  // Your code here\n}', 60, CURRENT_TIMESTAMP),
+INSERT INTO questions (title, description, difficulty, category, company, hints, sample_input, sample_output, constraints, starter_code, time_limit, created_at)
+SELECT 'Word Ladder', 'Find shortest transformation steps between beginWord and endWord.', 'HARD', 'GRAPHS', 'Google, Amazon', 'BFS over wildcard states.', 'begin="hit", end="cog"', '5', 'All words same length.', 'function ladderLength(beginWord, endWord, wordList) {\n  // Your code here\n}', 60, CURRENT_TIMESTAMP
+WHERE NOT EXISTS (SELECT 1 FROM questions WHERE title = 'Word Ladder');
 
-('Median of Two Sorted Arrays', 'Given two sorted arrays nums1 and nums2 of size m and n respectively, return the median of the two sorted arrays. The overall run time complexity should be O(log (m+n)).', 'HARD', 'SEARCHING', 'Google, Microsoft', 'Use binary search', 'nums1 = [1,3], nums2 = [2]', '2.0', 'nums1.length == m, nums2.length == n', 'function findMedianSortedArrays(nums1, nums2) {\n  // Your code here\n}', 60, CURRENT_TIMESTAMP),
+INSERT INTO questions (title, description, difficulty, category, company, hints, sample_input, sample_output, constraints, starter_code, time_limit, created_at)
+SELECT 'Median of Two Sorted Arrays', 'Find median in O(log(m+n)) time.', 'HARD', 'SEARCHING', 'Google, Microsoft', 'Binary search partitioning.', 'nums1=[1,3], nums2=[2]', '2.0', 'nums1.length == m, nums2.length == n', 'function findMedianSortedArrays(nums1, nums2) {\n  // Your code here\n}', 60, CURRENT_TIMESTAMP
+WHERE NOT EXISTS (SELECT 1 FROM questions WHERE title = 'Median of Two Sorted Arrays');
 
-('LRU Cache', 'Design a data structure that follows the constraints of a Least Recently Used (LRU) cache.', 'HARD', 'DESIGN', 'Amazon, Facebook, Google', 'Use HashMap + Doubly Linked List', 'LRUCache cache = new LRUCache(2); cache.put(1, 1); cache.put(2, 2); cache.get(1);', '1', 'capacity > 0', 'class LRUCache {\n  constructor(capacity) {\n    // Your code here\n  }\n}', 60, CURRENT_TIMESTAMP);
+INSERT INTO questions (title, description, difficulty, category, company, hints, sample_input, sample_output, constraints, starter_code, time_limit, created_at)
+SELECT 'LRU Cache', 'Design an LRU cache with O(1) get and put.', 'HARD', 'DESIGN', 'Amazon, Facebook, Google', 'HashMap + Doubly Linked List.', 'capacity=2; put/get sequence', '1', 'capacity > 0', 'class LRUCache {\n  constructor(capacity) {\n    // Your code here\n  }\n}', 60, CURRENT_TIMESTAMP
+WHERE NOT EXISTS (SELECT 1 FROM questions WHERE title = 'LRU Cache');

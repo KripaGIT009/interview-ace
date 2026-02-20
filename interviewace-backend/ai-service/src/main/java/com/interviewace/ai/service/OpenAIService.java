@@ -1,6 +1,7 @@
 package com.interviewace.ai.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -14,8 +15,14 @@ public class OpenAIService {
     
     @Qualifier("openaiWebClient")
     private final WebClient openaiWebClient;
+
+    @Value("${openai.api.key}")
+    private String openaiApiKey;
     
     public Mono<String> generateFeedback(String code, String question, String language) {
+        if (isApiKeyMissing()) {
+            return Mono.error(new IllegalStateException("OpenAI API key is not configured."));
+        }
         Map<String, Object> requestBody = Map.of(
             "model", "gpt-4",
             "messages", List.of(
@@ -52,6 +59,9 @@ public class OpenAIService {
     }
     
     public Mono<Integer> scoreCode(String code, String question) {
+        if (isApiKeyMissing()) {
+            return Mono.error(new IllegalStateException("OpenAI API key is not configured."));
+        }
         Map<String, Object> requestBody = Map.of(
             "model", "gpt-4",
             "messages", List.of(
@@ -86,3 +96,10 @@ public class OpenAIService {
                 });
     }
 }
+
+
+    private boolean isApiKeyMissing() {
+        return openaiApiKey == null
+                || openaiApiKey.isBlank()
+                || "your-openai-api-key".equals(openaiApiKey);
+    }

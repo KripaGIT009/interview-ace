@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from '../lib/api';
-import { useAuthStore } from '../store/authStore';
+import axios from '@/lib/api';
+import { useAuthStore } from '@/store/authStore';
 
 interface UserProgress {
   totalSessions: number;
@@ -66,7 +66,7 @@ export default function DashboardPage() {
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <h1 className="text-2xl font-bold text-indigo-600">InterviewAce</h1>
           <div className="flex items-center gap-4">
-            <span className="text-gray-700">Welcome, {user?.username}!</span>
+            <span className="text-gray-700">Welcome, {user?.fullName}!</span>
             <Link to="/questions" className="text-indigo-600 hover:text-indigo-700 font-medium">
               Questions
             </Link>

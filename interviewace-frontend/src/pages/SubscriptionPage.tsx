@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
-import { loadStripe } from '@stripe/stripe-js';
-import axios from '../lib/api';
-
-const stripePromise = loadStripe('pk_test_your_stripe_publishable_key');
+import axios from '@/lib/api';
+import useToast from '@/hooks/useToast';
 
 interface Subscription {
   tier: string;
@@ -53,6 +51,7 @@ export default function SubscriptionPage() {
   const [subscription, setSubscription] = useState<Subscription | null>(null);
   const [loading, setLoading] = useState(true);
   const [processingTier, setProcessingTier] = useState<string | null>(null);
+  const { showToast, showConfirm } = useToast();
 
   useEffect(() => {
     fetchSubscription();
@@ -65,6 +64,7 @@ export default function SubscriptionPage() {
       setLoading(false);
     } catch (error) {
       console.error('Failed to fetch subscription:', error);
+      showToast('Failed to load subscription details. Please try again.', 'error');
       setLoading(false);
     }
   };
@@ -84,21 +84,28 @@ export default function SubscriptionPage() {
       window.location.href = response.data.url;
     } catch (error) {
       console.error('Failed to create checkout session:', error);
-      alert('Failed to start checkout. Please try again.');
+      showToast('Failed to start checkout. Please try again.', 'error');
       setProcessingTier(null);
     }
   };
 
   const handleCancel = async () => {
-    if (!confirm('Are you sure you want to cancel your subscription?')) return;
+    const shouldCancel = await showConfirm({
+      title: 'Cancel subscription',
+      message: 'Are you sure you want to cancel your subscription?',
+      confirmLabel: 'Cancel subscription',
+      cancelLabel: 'Keep subscription'
+    });
+
+    if (!shouldCancel) return;
 
     try {
       await axios.post('/payments/cancel');
-      alert('Subscription canceled successfully');
+      showToast('Subscription canceled successfully.', 'success');
       await fetchSubscription();
     } catch (error) {
       console.error('Failed to cancel subscription:', error);
-      alert('Failed to cancel subscription. Please try again.');
+      showToast('Failed to cancel subscription. Please try again.', 'error');
     }
   };
 

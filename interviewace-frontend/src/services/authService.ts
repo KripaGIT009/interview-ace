@@ -32,8 +32,10 @@ export const authService = {
     return response.data
   },
 
-  getCurrentUser: async () => {
-    const response = await apiClient.get('/auth/me')
+  getCurrentUser: async (userId: number) => {
+    const response = await apiClient.get('/auth/me', {
+      params: { userId },
+    })
     return response.data
   },
 
