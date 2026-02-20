@@ -12,10 +12,10 @@
         <relativePath/>
     </parent>
     
-    <groupId>com.interviewace</groupId>
-    <artifactId>interviewace</artifactId>
+    <groupId>com.interviewlabpro</groupId>
+    <artifactId>interviewlabpro</artifactId>
     <version>1.0.0</version>
-    <name>InterviewAce</name>
+    <name>InterviewLabPro</name>
     <description>AI-powered interview practice platform</description>
     
     <properties>

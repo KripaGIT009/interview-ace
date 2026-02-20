@@ -1,10 +1,10 @@
 $ErrorActionPreference = 'Stop'
 
-Write-Host "Starting InterviewAce services..." -ForegroundColor Cyan
+Write-Host "Starting InterviewLabPro services..." -ForegroundColor Cyan
 
 if (-not (Test-Path ".env")) {
 @"
-DB_PASSWORD=interviewace123
+DB_PASSWORD=interviewlabpro123
 JWT_SECRET=$(New-Guid)
 OPENAI_API_KEY=
 ELEVENLABS_API_KEY=
@@ -40,7 +40,7 @@ $services = @(
 )
 
 foreach ($service in $services) {
-    $servicePath = Join-Path "interviewace-backend" $service
+    $servicePath = Join-Path "interviewlabpro-backend" $service
     if (Test-Path $servicePath) {
         Start-Process powershell -ArgumentList "-NoExit", "-Command", "Set-Location '$PWD\$servicePath'; mvn spring-boot:run"
         Write-Host "Started $service locally" -ForegroundColor Green
@@ -48,7 +48,7 @@ foreach ($service in $services) {
     }
 }
 
-if (Test-Path "interviewace-frontend\package.json") {
-    Start-Process powershell -ArgumentList "-NoExit", "-Command", "Set-Location '$PWD\interviewace-frontend'; npm run dev"
+if (Test-Path "interviewlabpro-frontend\package.json") {
+    Start-Process powershell -ArgumentList "-NoExit", "-Command", "Set-Location '$PWD\interviewlabpro-frontend'; npm run dev"
     Write-Host "Started frontend locally" -ForegroundColor Green
 }

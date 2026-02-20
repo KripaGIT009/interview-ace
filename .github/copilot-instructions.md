@@ -1,4 +1,4 @@
-# InterviewAce - Spring Boot Project Setup
+# InterviewLabPro - Spring Boot Project Setup
 
 ## Project Overview
 AI-powered interview practice platform built with Spring Boot, providing mock coding interviews with instant feedback.
