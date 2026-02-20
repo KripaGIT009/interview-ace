@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -5,10 +7,10 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <h1 className="text-2xl font-bold text-indigo-600">InterviewAce</h1>
           <div className="space-x-4">
-            <a href="/login" className="text-gray-700 hover:text-indigo-600">Login</a>
-            <a href="/signup" className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">
+            <Link to="/login" className="text-gray-700 hover:text-indigo-600">Login</Link>
+            <Link to="/signup" className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">
               Get Started
-            </a>
+            </Link>
           </div>
         </div>
       </nav>
@@ -22,12 +24,12 @@ export default function LandingPage() {
             Practice real coding interviews with AI-powered feedback, voice interaction, 
             and personalized learning paths
           </p>
-          <a 
-            href="/signup" 
+          <Link 
+            to="/signup" 
             className="bg-indigo-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-indigo-700 inline-block"
           >
             Start Practicing Free
-          </a>
+          </Link>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8 mt-20">

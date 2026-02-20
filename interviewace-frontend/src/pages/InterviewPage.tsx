@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from '../lib/api';
+import axios from '@/lib/api';
+import { isAxiosError } from 'axios';
+import useToast from '@/hooks/useToast';
 import Editor from '@monaco-editor/react';
 import RecordRTC from 'recordrtc';
 
@@ -36,6 +38,7 @@ export default function InterviewPage() {
   const [feedback, setFeedback] = useState('');
   const [score, setScore] = useState<number | null>(null);
   const [showFeedback, setShowFeedback] = useState(false);
+  const { showToast } = useToast();
   const recorderRef = useRef<RecordRTC | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
 
@@ -75,6 +78,7 @@ export default function InterviewPage() {
       setLoading(false);
     } catch (error) {
       console.error('Failed to fetch session:', error);
+      showToast(getErrorMessage(error, 'Failed to load interview session. Please try again.'), 'error');
       setLoading(false);
     }
   };
@@ -82,9 +86,10 @@ export default function InterviewPage() {
   const handleSubmitCode = async () => {
     try {
       await axios.post(`/interviews/${sessionId}/submit`, { code });
-      alert('Code submitted successfully!');
+      showToast('Code submitted successfully!', 'success');
     } catch (error) {
       console.error('Failed to submit code:', error);
+      showToast(getErrorMessage(error, 'Failed to submit code. Please try again.'), 'error');
     }
   };
 
@@ -112,22 +117,44 @@ export default function InterviewPage() {
         score: aiScore
       });
 
-      // Update user progress
-      await axios.post('/users/progress/update', {
-        difficulty: question?.difficulty,
-        score: aiScore,
-        timeSpent: Math.floor((new Date().getTime() - new Date(session!.startedAt).getTime()) / 60000)
-      });
+      await updateProgress(aiScore);
 
       setFeedback(aiFeedback);
       setScore(aiScore);
       setShowFeedback(true);
     } catch (error) {
       console.error('Failed to complete interview:', error);
-      alert('Failed to get AI feedback. Please try again.');
+      const errorMessage = getErrorMessage(error, 'Failed to get AI feedback. Please try again.');
+      showToast(errorMessage, 'error');
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const updateProgress = async (aiScore: number) => {
+    try {
+      await axios.post('/users/progress/update', {
+        difficulty: question?.difficulty,
+        score: aiScore,
+        timeSpent: Math.floor((new Date().getTime() - new Date(session!.startedAt).getTime()) / 60000)
+      });
+    } catch (error) {
+      console.error('Failed to update user progress:', error);
+      showToast(getErrorMessage(error, 'Failed to update progress. Please try again.'), 'error');
+    }
+  };
+
+  const getErrorMessage = (error: unknown, fallbackMessage: string) => {
+    if (isAxiosError(error)) {
+      const data = error.response?.data as { error?: string; message?: string } | undefined;
+      if (data?.message) {
+        return data.message;
+      }
+      if (data?.error) {
+        return data.error;
+      }
+    }
+    return fallbackMessage;
   };
 
   const startRecording = async () => {
@@ -145,7 +172,7 @@ export default function InterviewPage() {
       setRecording(true);
     } catch (error) {
       console.error('Failed to start recording:', error);
-      alert('Microphone permission denied');
+      showToast('Microphone permission denied.', 'error');
     }
   };
 

@@ -11,15 +11,15 @@ spring:
     url: ${SPRING_DATASOURCE_URL:jdbc:h2:mem:questionsdb}
     username: ${SPRING_DATASOURCE_USERNAME:sa}
     password: ${SPRING_DATASOURCE_PASSWORD:}
-    driver-class-name: ${SPRING_DATASOURCE_DRIVER:org.h2.Driver}
+    driver-class-name: ${SPRING_DATASOURCE_DRIVER_CLASS_NAME:org.h2.Driver}
   jpa:
+    defer-datasource-initialization: true
     hibernate:
       ddl-auto: update
     show-sql: false
     properties:
       hibernate:
         format_sql: true
-        dialect: ${HIBERNATE_DIALECT:org.hibernate.dialect.H2Dialect}
   h2:
     console:
       enabled: true

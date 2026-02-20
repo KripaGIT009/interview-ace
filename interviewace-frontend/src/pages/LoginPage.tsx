@@ -1,13 +1,15 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useAuthStore } from '@/store/authStore'
 import { authService } from '@/services/authService'
-import toast from 'react-hot-toast'
+import useToast from '@/hooks/useToast'
 
 export default function LoginPage() {
   const navigate = useNavigate()
   const { login } = useAuthStore()
   const [loading, setLoading] = useState(false)
+  const { showToast } = useToast()
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -19,11 +21,23 @@ export default function LoginPage() {
 
     try {
       const response = await authService.login(formData)
-      login(response.user, response.token)
-      toast.success('Welcome back!')
+      const token = typeof response.token === 'string' ? response.token.trim() : ''
+      if (token.split('.').length !== 3) {
+        throw new Error('Invalid auth token')
+      }
+      login(response.user, token)
+      showToast('Welcome back!', 'success')
       navigate('/dashboard')
     } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Login failed')
+      const status = error?.response?.status
+      const message = error?.response?.data?.message
+      if (message) {
+        showToast(message, 'error')
+      } else if (!status || status >= 500) {
+        showToast('Auth service is starting. Please retry in a few seconds.', 'info')
+      } else {
+        showToast('Login failed', 'error')
+      }
     } finally {
       setLoading(false)
     }
@@ -75,9 +89,9 @@ export default function LoginPage() {
 
         <p className="mt-6 text-center text-gray-600">
           Don't have an account?{' '}
-          <a href="/signup" className="text-indigo-600 font-semibold hover:text-indigo-700">
+          <Link to="/signup" className="text-indigo-600 font-semibold hover:text-indigo-700">
             Sign up
-          </a>
+          </Link>
         </p>
       </div>
     </div>

@@ -12,12 +12,16 @@ import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 
 @Component
 public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAuthenticationFilter.Config> {
+
+    private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
     
     @Value("${jwt.secret}")
     private String jwtSecret;
@@ -32,11 +36,13 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
             ServerHttpRequest request = exchange.getRequest();
             
             if (!request.getHeaders().containsKey("Authorization")) {
+                logger.warn("Missing Authorization header for path {}", request.getURI().getPath());
                 return onError(exchange, "Missing authorization header", HttpStatus.UNAUTHORIZED);
             }
             
             String authHeader = request.getHeaders().getFirst("Authorization");
             if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                logger.warn("Invalid Authorization header format for path {}", request.getURI().getPath());
                 return onError(exchange, "Invalid authorization header", HttpStatus.UNAUTHORIZED);
             }
             
@@ -44,6 +50,7 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
             
             try {
                 if (!validateToken(token)) {
+                    logger.warn("Token validation failed for path {}", request.getURI().getPath());
                     return onError(exchange, "Invalid or expired token", HttpStatus.UNAUTHORIZED);
                 }
                 
@@ -60,6 +67,7 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
                 return chain.filter(modifiedExchange);
                 
             } catch (Exception e) {
+                logger.warn("Token validation exception for path {}: {}", request.getURI().getPath(), e.getMessage());
                 return onError(exchange, "Token validation failed: " + e.getMessage(), HttpStatus.UNAUTHORIZED);
             }
         };
@@ -84,6 +92,7 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
                     .parseSignedClaims(token);
             return true;
         } catch (Exception e) {
+            logger.warn("JWT validation error: {}", e.getMessage());
             return false;
         }
     }

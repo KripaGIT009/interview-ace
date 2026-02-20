@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # PostgreSQL Database
   postgres:
@@ -47,7 +45,7 @@ services:
     networks:
       - interviewace-network
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
+      test: ["CMD-SHELL", "wget -q -O - http://localhost:8761/actuator/health || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -104,10 +102,13 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/auth_db
       SPRING_DATASOURCE_USERNAME: interviewace
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-interviewace123}
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
       JWT_SECRET: ${JWT_SECRET:-your-secret-key-change-in-production}
       REDIS_HOST: redis
       REDIS_PORT: 6379
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
     networks:
       - interviewace-network
 
@@ -128,6 +129,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/questions_db
       SPRING_DATASOURCE_USERNAME: interviewace
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-interviewace123}
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
     networks:
       - interviewace-network
@@ -149,6 +151,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/interviews_db
       SPRING_DATASOURCE_USERNAME: interviewace
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-interviewace123}
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
     networks:
       - interviewace-network
@@ -170,6 +173,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/users_db
       SPRING_DATASOURCE_USERNAME: interviewace
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-interviewace123}
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
     networks:
       - interviewace-network
@@ -209,6 +213,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/payments_db
       SPRING_DATASOURCE_USERNAME: interviewace
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-interviewace123}
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
       STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
       STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET}
