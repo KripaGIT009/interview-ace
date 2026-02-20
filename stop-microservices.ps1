@@ -1,6 +1,6 @@
 $ErrorActionPreference = 'SilentlyContinue'
 
-Write-Host "Stopping InterviewAce services..." -ForegroundColor Cyan
+Write-Host "Stopping InterviewLabPro services..." -ForegroundColor Cyan
 
 try {
     docker compose down

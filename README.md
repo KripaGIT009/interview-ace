@@ -1,4 +1,4 @@
-# InterviewAce - AI-Powered Interview Practice Platform
+# InterviewLabPro - AI-Powered Interview Practice Platform
 
 [![Java](https://img.shields.io/badge/Java-17-orange.svg)](https://www.oracle.com/java/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2-green.svg)](https://spring.io/projects/spring-boot)
@@ -7,7 +7,7 @@
 
 ## 🎯 Overview
 
-InterviewAce is an enterprise-grade AI-powered interview practice platform built with **microservices architecture**. It helps developers prepare for technical coding interviews through mock sessions with instant AI feedback powered by GPT-4.
+InterviewLabPro is an enterprise-grade AI-powered interview practice platform built with **microservices architecture**. It helps developers prepare for technical coding interviews through mock sessions with instant AI feedback powered by GPT-4.
 
 ### Key Features
 - 🔐 **JWT Authentication** - Secure user authentication and authorization
@@ -110,7 +110,7 @@ Wait **60-90 seconds** for services to register with Eureka.
 ### 2. Start React Frontend
 
 ```powershell
-cd interviewace-frontend
+cd interviewlabpro-frontend
 npm install    # First time only
 npm run dev
 ```
@@ -256,7 +256,7 @@ STRIPE_PRICE_ID_PRO=price_...
 STRIPE_PRICE_ID_ENTERPRISE=price_...
 
 # Database (optional - defaults to H2)
-SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/interviewace
+SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/interviewlabpro
 SPRING_DATASOURCE_USERNAME=postgres
 SPRING_DATASOURCE_PASSWORD=password
 
@@ -266,13 +266,13 @@ JWT_SECRET=your-secret-key-here
 
 ### 2. Stripe Configuration
 
-Update [SubscriptionPage.tsx](interviewace-frontend/src/pages/SubscriptionPage.tsx#L4):
+Update [SubscriptionPage.tsx](interviewlabpro-frontend/src/pages/SubscriptionPage.tsx#L4):
 
 ```typescript
 const stripePromise = loadStripe('pk_test_YOUR_PUBLISHABLE_KEY');
 ```
 
-Update price IDs in [SubscriptionPage.tsx](interviewace-frontend/src/pages/SubscriptionPage.tsx#L20):
+Update price IDs in [SubscriptionPage.tsx](interviewlabpro-frontend/src/pages/SubscriptionPage.tsx#L20):
 
 ```typescript
 const tiers = [
@@ -412,9 +412,9 @@ docker-compose down
 ### Individual Service Build
 
 ```powershell
-cd interviewace-backend/auth-service
-docker build -t interviewace/auth-service .
-docker run -p 8081:8081 interviewace/auth-service
+cd interviewlabpro-backend/auth-service
+docker build -t interviewlabpro/auth-service .
+docker run -p 8081:8081 interviewlabpro/auth-service
 ```
 
 ---
@@ -424,8 +424,8 @@ docker run -p 8081:8081 interviewace/auth-service
 ### Project Structure
 
 ```
-interviewace/
-├── interviewace-backend/
+interviewlabpro/
+├── interviewlabpro-backend/
 │   ├── eureka-server/         # Service discovery
 │   ├── config-server/         # Configuration management
 │   ├── api-gateway/           # API Gateway
@@ -435,7 +435,7 @@ interviewace/
 │   ├── user-service/          # User progress
 │   ├── ai-service/            # AI integration
 │   └── payment-service/       # Stripe payments
-├── interviewace-frontend/
+├── interviewlabpro-frontend/
 │   ├── src/
 │   │   ├── pages/             # React pages
 │   │   ├── services/          # API services
@@ -450,7 +450,7 @@ interviewace/
 
 ### Adding a New Service
 
-1. Create service directory in `interviewace-backend/`
+1. Create service directory in `interviewlabpro-backend/`
 2. Add Spring Boot dependencies in `pom.xml`
 3. Configure Eureka client in `application.yml`
 4. Add route in API Gateway
@@ -506,8 +506,8 @@ MIT License - see LICENSE file for details
 
 ## 📞 Support
 
-- **Issues**: https://github.com/yourusername/interviewace/issues
-- **Email**: support@interviewace.com
+- **Issues**: https://github.com/yourusername/interviewlabpro/issues
+- **Email**: support@interviewlabpro.com
 - **Docs**: Full documentation in this README
 
 ---
@@ -522,11 +522,11 @@ MIT License - see LICENSE file for details
 
 ---
 
-**Built with ❤️ by the InterviewAce Team**
+**Built with ❤️ by the InterviewLabPro Team**
 | **H2 Console** | http://localhost:8080/h2-console | Database Management |
 
 ### H2 Database Console
-- **JDBC URL**: `jdbc:h2:mem:interviewace`
+- **JDBC URL**: `jdbc:h2:mem:interviewlabpro`
 - **Username**: `sa`
 - **Password**: (leave empty)
 
@@ -630,7 +630,7 @@ See [PROJECT_OVERVIEW.md](PROJECT_OVERVIEW.md) for detailed schema.
 
 ### Project Structure
 ```
-interviewace/
+interviewlabpro/
 ├── src/main/java/              # Backend (Spring Boot)
 ├── src/main/resources/         # Backend resources
 ├── frontend-service/           # Frontend (Node.js)
@@ -713,7 +713,7 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 This project is licensed under the MIT License.
 
 ## Contact
-For support, email support@interviewace.com
+For support, email support@interviewlabpro.com
 
 ---
 

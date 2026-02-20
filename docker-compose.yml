@@ -2,10 +2,10 @@ services:
   # PostgreSQL Database
   postgres:
     image: postgres:15-alpine
-    container_name: interviewace-postgres
+    container_name: interviewlabpro-postgres
     environment:
-      POSTGRES_USER: interviewace
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-interviewace123}
+      POSTGRES_USER: interviewlabpro
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-interviewlabpro123}
       POSTGRES_MULTIPLE_DATABASES: auth_db,questions_db,interviews_db,users_db,payments_db
     ports:
       - "5432:5432"
@@ -13,9 +13,9 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./scripts/init-databases.sh:/docker-entrypoint-initdb.d/init-databases.sh
     networks:
-      - interviewace-network
+      - interviewlabpro-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U interviewace"]
+      test: ["CMD-SHELL", "pg_isready -U interviewlabpro"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -23,11 +23,11 @@ services:
   # Redis for Caching
   redis:
     image: redis:7-alpine
-    container_name: interviewace-redis
+    container_name: interviewlabpro-redis
     ports:
       - "6379:6379"
     networks:
-      - interviewace-network
+      - interviewlabpro-network
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
@@ -37,13 +37,13 @@ services:
   # Eureka Server
   eureka-server:
     build:
-      context: ./interviewace-backend/eureka-server
+      context: ./interviewlabpro-backend/eureka-server
       dockerfile: Dockerfile
     container_name: eureka-server
     ports:
       - "8761:8761"
     networks:
-      - interviewace-network
+      - interviewlabpro-network
     healthcheck:
       test: ["CMD-SHELL", "wget -q -O - http://localhost:8761/actuator/health || exit 1"]
       interval: 30s
@@ -53,7 +53,7 @@ services:
   # Config Server
   config-server:
     build:
-      context: ./interviewace-backend/config-server
+      context: ./interviewlabpro-backend/config-server
       dockerfile: Dockerfile
     container_name: config-server
     ports:
@@ -64,12 +64,12 @@ services:
     environment:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
     networks:
-      - interviewace-network
+      - interviewlabpro-network
 
   # API Gateway
   api-gateway:
     build:
-      context: ./interviewace-backend/api-gateway
+      context: ./interviewlabpro-backend/api-gateway
       dockerfile: Dockerfile
     container_name: api-gateway
     ports:
@@ -81,12 +81,12 @@ services:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
       JWT_SECRET: ${JWT_SECRET:-your-secret-key-change-in-production}
     networks:
-      - interviewace-network
+      - interviewlabpro-network
 
   # Auth Service
   auth-service:
     build:
-      context: ./interviewace-backend/auth-service
+      context: ./interviewlabpro-backend/auth-service
       dockerfile: Dockerfile
     container_name: auth-service
     ports:
@@ -100,8 +100,8 @@ services:
         condition: service_healthy
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/auth_db
-      SPRING_DATASOURCE_USERNAME: interviewace
-      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-interviewace123}
+      SPRING_DATASOURCE_USERNAME: interviewlabpro
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-interviewlabpro123}
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
       JWT_SECRET: ${JWT_SECRET:-your-secret-key-change-in-production}
@@ -110,12 +110,12 @@ services:
       SPRING_DATA_REDIS_HOST: redis
       SPRING_DATA_REDIS_PORT: 6379
     networks:
-      - interviewace-network
+      - interviewlabpro-network
 
   # Question Service
   question-service:
     build:
-      context: ./interviewace-backend/question-service
+      context: ./interviewlabpro-backend/question-service
       dockerfile: Dockerfile
     container_name: question-service
     ports:
@@ -127,17 +127,17 @@ services:
         condition: service_healthy
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/questions_db
-      SPRING_DATASOURCE_USERNAME: interviewace
-      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-interviewace123}
+      SPRING_DATASOURCE_USERNAME: interviewlabpro
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-interviewlabpro123}
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
     networks:
-      - interviewace-network
+      - interviewlabpro-network
 
   # Interview Service
   interview-service:
     build:
-      context: ./interviewace-backend/interview-service
+      context: ./interviewlabpro-backend/interview-service
       dockerfile: Dockerfile
     container_name: interview-service
     ports:
@@ -149,17 +149,17 @@ services:
         condition: service_healthy
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/interviews_db
-      SPRING_DATASOURCE_USERNAME: interviewace
-      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-interviewace123}
+      SPRING_DATASOURCE_USERNAME: interviewlabpro
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-interviewlabpro123}
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
     networks:
-      - interviewace-network
+      - interviewlabpro-network
 
   # User Service
   user-service:
     build:
-      context: ./interviewace-backend/user-service
+      context: ./interviewlabpro-backend/user-service
       dockerfile: Dockerfile
     container_name: user-service
     ports:
@@ -171,17 +171,17 @@ services:
         condition: service_healthy
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/users_db
-      SPRING_DATASOURCE_USERNAME: interviewace
-      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-interviewace123}
+      SPRING_DATASOURCE_USERNAME: interviewlabpro
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-interviewlabpro123}
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
     networks:
-      - interviewace-network
+      - interviewlabpro-network
 
   # AI Service (OpenAI & ElevenLabs)
   ai-service:
     build:
-      context: ./interviewace-backend/ai-service
+      context: ./interviewlabpro-backend/ai-service
       dockerfile: Dockerfile
     container_name: ai-service
     ports:
@@ -194,12 +194,12 @@ services:
       OPENAI_API_KEY: ${OPENAI_API_KEY}
       ELEVENLABS_API_KEY: ${ELEVENLABS_API_KEY}
     networks:
-      - interviewace-network
+      - interviewlabpro-network
 
   # Payment Service (Stripe)
   payment-service:
     build:
-      context: ./interviewace-backend/payment-service
+      context: ./interviewlabpro-backend/payment-service
       dockerfile: Dockerfile
     container_name: payment-service
     ports:
@@ -211,19 +211,19 @@ services:
         condition: service_healthy
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/payments_db
-      SPRING_DATASOURCE_USERNAME: interviewace
-      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-interviewace123}
+      SPRING_DATASOURCE_USERNAME: interviewlabpro
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-interviewlabpro123}
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
       STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
       STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET}
     networks:
-      - interviewace-network
+      - interviewlabpro-network
 
   # React Frontend
   react-frontend:
     build:
-      context: ./interviewace-frontend
+      context: ./interviewlabpro-frontend
       dockerfile: Dockerfile
     container_name: react-frontend
     ports:
@@ -233,12 +233,12 @@ services:
     environment:
       VITE_API_URL: http://localhost:8080/api
     networks:
-      - interviewace-network
+      - interviewlabpro-network
 
 volumes:
   postgres_data:
     driver: local
 
 networks:
-  interviewace-network:
+  interviewlabpro-network:
     driver: bridge

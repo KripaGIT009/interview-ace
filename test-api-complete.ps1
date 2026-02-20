@@ -1,4 +1,4 @@
-# InterviewAce API Testing Script
+# InterviewLabPro API Testing Script
 # This script tests all microservices end-to-end
 
 $API_BASE = "http://localhost:8080"
@@ -6,7 +6,7 @@ $TOKEN = ""
 $SESSION_ID = ""
 
 Write-Host "=" -ForegroundColor Cyan -NoNewline; Write-Host "=" * 60 -ForegroundColor Cyan
-Write-Host "  InterviewAce API Testing Suite" -ForegroundColor Cyan
+Write-Host "  InterviewLabPro API Testing Suite" -ForegroundColor Cyan
 Write-Host "=" -ForegroundColor Cyan -NoNewline; Write-Host "=" * 60 -ForegroundColor Cyan
 Write-Host ""
 
