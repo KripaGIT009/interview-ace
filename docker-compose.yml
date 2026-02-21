@@ -1,25 +1,11 @@
-services:
-  # PostgreSQL Database
-  postgres:
-    image: postgres:15-alpine
-    container_name: interviewlabpro-postgres
-    environment:
-      POSTGRES_USER: interviewlabpro
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-interviewlabpro123}
-      POSTGRES_MULTIPLE_DATABASES: auth_db,questions_db,interviews_db,users_db,payments_db
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./scripts/init-databases.sh:/docker-entrypoint-initdb.d/init-databases.sh
-    networks:
-      - interviewlabpro-network
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U interviewlabpro"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+## Local PostgreSQL requirements (host machine)
+## - Host: localhost (containers connect via host.docker.internal)
+## - Port: 5432
+## - Username: postgres
+## - Password: postgres (or set DB_PASSWORD)
+## - Databases: auth_db, questions_db, interviews_db, users_db, payments_db
 
+services:
   # Redis for Caching
   redis:
     image: redis:7-alpine
@@ -92,16 +78,14 @@ services:
     ports:
       - "8081:8081"
     depends_on:
-      postgres:
-        condition: service_healthy
       eureka-server:
         condition: service_healthy
       redis:
         condition: service_healthy
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/auth_db
-      SPRING_DATASOURCE_USERNAME: interviewlabpro
-      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-interviewlabpro123}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST:-host.docker.internal}:5432/auth_db
+      SPRING_DATASOURCE_USERNAME: ${DB_USER:-postgres}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-postgres}
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
       JWT_SECRET: ${JWT_SECRET:-your-secret-key-change-in-production}
@@ -121,14 +105,12 @@ services:
     ports:
       - "8082:8082"
     depends_on:
-      postgres:
-        condition: service_healthy
       eureka-server:
         condition: service_healthy
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/questions_db
-      SPRING_DATASOURCE_USERNAME: interviewlabpro
-      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-interviewlabpro123}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST:-host.docker.internal}:5432/questions_db
+      SPRING_DATASOURCE_USERNAME: ${DB_USER:-postgres}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-postgres}
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
     networks:
@@ -143,14 +125,12 @@ services:
     ports:
       - "8083:8083"
     depends_on:
-      postgres:
-        condition: service_healthy
       eureka-server:
         condition: service_healthy
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/interviews_db
-      SPRING_DATASOURCE_USERNAME: interviewlabpro
-      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-interviewlabpro123}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST:-host.docker.internal}:5432/interviews_db
+      SPRING_DATASOURCE_USERNAME: ${DB_USER:-postgres}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-postgres}
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
     networks:
@@ -165,14 +145,12 @@ services:
     ports:
       - "8084:8084"
     depends_on:
-      postgres:
-        condition: service_healthy
       eureka-server:
         condition: service_healthy
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/users_db
-      SPRING_DATASOURCE_USERNAME: interviewlabpro
-      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-interviewlabpro123}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST:-host.docker.internal}:5432/users_db
+      SPRING_DATASOURCE_USERNAME: ${DB_USER:-postgres}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-postgres}
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
     networks:
@@ -205,14 +183,12 @@ services:
     ports:
       - "8086:8086"
     depends_on:
-      postgres:
-        condition: service_healthy
       eureka-server:
         condition: service_healthy
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/payments_db
-      SPRING_DATASOURCE_USERNAME: interviewlabpro
-      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-interviewlabpro123}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST:-host.docker.internal}:5432/payments_db
+      SPRING_DATASOURCE_USERNAME: ${DB_USER:-postgres}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-postgres}
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
       STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
@@ -234,10 +210,6 @@ services:
       VITE_API_URL: http://localhost:8080/api
     networks:
       - interviewlabpro-network
-
-volumes:
-  postgres_data:
-    driver: local
 
 networks:
   interviewlabpro-network:

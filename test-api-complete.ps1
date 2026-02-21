@@ -57,11 +57,11 @@ $signupBody = @{
 
 $signupResult = Invoke-API -Method "POST" -Endpoint "/api/auth/signup" -Body $signupBody
 if ($signupResult) {
-    Write-Host "  ✓ Sign up successful! User ID: $($signupResult.id)" -ForegroundColor Green
+    Write-Host "  âœ“ Sign up successful! User ID: $($signupResult.id)" -ForegroundColor Green
     $USERNAME = $signupResult.username
     $EMAIL = $signupResult.email
 } else {
-    Write-Host "  ✗ Sign up failed!" -ForegroundColor Red
+    Write-Host "  âœ— Sign up failed!" -ForegroundColor Red
     exit 1
 }
 
@@ -77,9 +77,9 @@ $loginBody = @{
 $loginResult = Invoke-API -Method "POST" -Endpoint "/api/auth/login" -Body $loginBody
 if ($loginResult -and $loginResult.token) {
     $TOKEN = $loginResult.token
-    Write-Host "  ✓ Login successful! Token received" -ForegroundColor Green
+    Write-Host "  âœ“ Login successful! Token received" -ForegroundColor Green
 } else {
-    Write-Host "  ✗ Login failed!" -ForegroundColor Red
+    Write-Host "  âœ— Login failed!" -ForegroundColor Red
     exit 1
 }
 
@@ -89,9 +89,9 @@ Start-Sleep -Seconds 1
 Write-Host "[3/14] Testing Token Validation..." -ForegroundColor Yellow
 $validateResult = Invoke-API -Method "GET" -Endpoint "/api/auth/validate" -RequireAuth $true
 if ($validateResult -and $validateResult.valid) {
-    Write-Host "  ✓ Token is valid! User ID: $($validateResult.userId)" -ForegroundColor Green
+    Write-Host "  âœ“ Token is valid! User ID: $($validateResult.userId)" -ForegroundColor Green
 } else {
-    Write-Host "  ✗ Token validation failed!" -ForegroundColor Red
+    Write-Host "  âœ— Token validation failed!" -ForegroundColor Red
 }
 
 Start-Sleep -Seconds 1
@@ -100,9 +100,9 @@ Start-Sleep -Seconds 1
 Write-Host "[4/14] Testing Get All Questions..." -ForegroundColor Yellow
 $questions = Invoke-API -Method "GET" -Endpoint "/api/questions" -RequireAuth $true
 if ($questions) {
-    Write-Host "  ✓ Found $($questions.Count) questions" -ForegroundColor Green
+    Write-Host "  âœ“ Found $($questions.Count) questions" -ForegroundColor Green
 } else {
-    Write-Host "  ✗ Failed to get questions!" -ForegroundColor Red
+    Write-Host "  âœ— Failed to get questions!" -ForegroundColor Red
 }
 
 Start-Sleep -Seconds 1
@@ -111,9 +111,9 @@ Start-Sleep -Seconds 1
 Write-Host "[5/14] Testing Filter Questions (EASY)..." -ForegroundColor Yellow
 $easyQuestions = Invoke-API -Method "GET" -Endpoint "/api/questions?difficulty=EASY" -RequireAuth $true
 if ($easyQuestions) {
-    Write-Host "  ✓ Found $($easyQuestions.Count) EASY questions" -ForegroundColor Green
+    Write-Host "  âœ“ Found $($easyQuestions.Count) EASY questions" -ForegroundColor Green
 } else {
-    Write-Host "  ✗ Failed to filter questions!" -ForegroundColor Red
+    Write-Host "  âœ— Failed to filter questions!" -ForegroundColor Red
 }
 
 Start-Sleep -Seconds 1
@@ -122,10 +122,10 @@ Start-Sleep -Seconds 1
 Write-Host "[6/14] Testing Get Random Question..." -ForegroundColor Yellow
 $randomQuestion = Invoke-API -Method "GET" -Endpoint "/api/questions/random" -RequireAuth $true
 if ($randomQuestion -and $randomQuestion.id) {
-    Write-Host "  ✓ Got random question: $($randomQuestion.title)" -ForegroundColor Green
+    Write-Host "  âœ“ Got random question: $($randomQuestion.title)" -ForegroundColor Green
     $QUESTION_ID = $randomQuestion.id
 } else {
-    Write-Host "  ✗ Failed to get random question!" -ForegroundColor Red
+    Write-Host "  âœ— Failed to get random question!" -ForegroundColor Red
     $QUESTION_ID = 1
 }
 
@@ -139,10 +139,10 @@ $startBody = @{
 
 $session = Invoke-API -Method "POST" -Endpoint "/api/interviews/start" -Body $startBody -RequireAuth $true
 if ($session -and $session.id) {
-    Write-Host "  ✓ Interview started! Session ID: $($session.id)" -ForegroundColor Green
+    Write-Host "  âœ“ Interview started! Session ID: $($session.id)" -ForegroundColor Green
     $SESSION_ID = $session.id
 } else {
-    Write-Host "  ✗ Failed to start interview!" -ForegroundColor Red
+    Write-Host "  âœ— Failed to start interview!" -ForegroundColor Red
 }
 
 Start-Sleep -Seconds 1
@@ -155,9 +155,9 @@ $codeBody = @{
 
 $submitResult = Invoke-API -Method "POST" -Endpoint "/api/interviews/$SESSION_ID/submit" -Body $codeBody -RequireAuth $true
 if ($submitResult) {
-    Write-Host "  ✓ Code submitted successfully!" -ForegroundColor Green
+    Write-Host "  âœ“ Code submitted successfully!" -ForegroundColor Green
 } else {
-    Write-Host "  ✗ Failed to submit code!" -ForegroundColor Red
+    Write-Host "  âœ— Failed to submit code!" -ForegroundColor Red
 }
 
 Start-Sleep -Seconds 1
@@ -172,11 +172,11 @@ $feedbackBody = @{
 
 $feedback = Invoke-API -Method "POST" -Endpoint "/api/ai/feedback" -Body $feedbackBody -RequireAuth $true
 if ($feedback -and $feedback.feedback) {
-    Write-Host "  ✓ AI Feedback received!" -ForegroundColor Green
+    Write-Host "  âœ“ AI Feedback received!" -ForegroundColor Green
     Write-Host "    Preview: $($feedback.feedback.Substring(0, [Math]::Min(100, $feedback.feedback.Length)))..." -ForegroundColor Gray
     $AI_FEEDBACK = $feedback.feedback
 } else {
-    Write-Host "  ⚠ AI Feedback skipped (requires OpenAI API key)" -ForegroundColor Yellow
+    Write-Host "  âš  AI Feedback skipped (requires OpenAI API key)" -ForegroundColor Yellow
     $AI_FEEDBACK = "Sample feedback: Good solution with O(n) complexity."
 }
 
@@ -191,10 +191,10 @@ $scoreBody = @{
 
 $score = Invoke-API -Method "POST" -Endpoint "/api/ai/score" -Body $scoreBody -RequireAuth $true
 if ($score -and $score.score) {
-    Write-Host "  ✓ AI Score received: $($score.score)/100" -ForegroundColor Green
+    Write-Host "  âœ“ AI Score received: $($score.score)/100" -ForegroundColor Green
     $AI_SCORE = $score.score
 } else {
-    Write-Host "  ⚠ AI Scoring skipped (requires OpenAI API key)" -ForegroundColor Yellow
+    Write-Host "  âš  AI Scoring skipped (requires OpenAI API key)" -ForegroundColor Yellow
     $AI_SCORE = 85
 }
 
@@ -209,9 +209,9 @@ $completeBody = @{
 
 $completeResult = Invoke-API -Method "POST" -Endpoint "/api/interviews/$SESSION_ID/complete" -Body $completeBody -RequireAuth $true
 if ($completeResult -and $completeResult.status -eq "COMPLETED") {
-    Write-Host "  ✓ Interview completed! Time spent: $($completeResult.timeSpent) minutes" -ForegroundColor Green
+    Write-Host "  âœ“ Interview completed! Time spent: $($completeResult.timeSpent) minutes" -ForegroundColor Green
 } else {
-    Write-Host "  ✗ Failed to complete interview!" -ForegroundColor Red
+    Write-Host "  âœ— Failed to complete interview!" -ForegroundColor Red
 }
 
 Start-Sleep -Seconds 1
@@ -220,13 +220,13 @@ Start-Sleep -Seconds 1
 Write-Host "[12/14] Testing Get User Progress..." -ForegroundColor Yellow
 $progress = Invoke-API -Method "GET" -Endpoint "/api/users/progress" -RequireAuth $true
 if ($progress) {
-    Write-Host "  ✓ User Progress retrieved!" -ForegroundColor Green
+    Write-Host "  âœ“ User Progress retrieved!" -ForegroundColor Green
     Write-Host "    Total Sessions: $($progress.totalSessions)" -ForegroundColor Gray
     Write-Host "    Completed: $($progress.completedSessions)" -ForegroundColor Gray
     Write-Host "    Average Score: $($progress.averageScore)" -ForegroundColor Gray
     Write-Host "    Current Streak: $($progress.currentStreak) days" -ForegroundColor Gray
 } else {
-    Write-Host "  ✗ Failed to get user progress!" -ForegroundColor Red
+    Write-Host "  âœ— Failed to get user progress!" -ForegroundColor Red
 }
 
 Start-Sleep -Seconds 1
@@ -235,11 +235,11 @@ Start-Sleep -Seconds 1
 Write-Host "[13/14] Testing Get Subscription..." -ForegroundColor Yellow
 $subscription = Invoke-API -Method "GET" -Endpoint "/api/payments/subscription" -RequireAuth $true
 if ($subscription) {
-    Write-Host "  ✓ Subscription retrieved!" -ForegroundColor Green
+    Write-Host "  âœ“ Subscription retrieved!" -ForegroundColor Green
     Write-Host "    Tier: $($subscription.tier)" -ForegroundColor Gray
     Write-Host "    Status: $($subscription.status)" -ForegroundColor Gray
 } else {
-    Write-Host "  ✗ Failed to get subscription!" -ForegroundColor Red
+    Write-Host "  âœ— Failed to get subscription!" -ForegroundColor Red
 }
 
 Start-Sleep -Seconds 1
@@ -248,9 +248,9 @@ Start-Sleep -Seconds 1
 Write-Host "[14/14] Testing Get Session History..." -ForegroundColor Yellow
 $history = Invoke-API -Method "GET" -Endpoint "/api/interviews/user" -RequireAuth $true
 if ($history) {
-    Write-Host "  ✓ Session history retrieved! Found $($history.Count) sessions" -ForegroundColor Green
+    Write-Host "  âœ“ Session history retrieved! Found $($history.Count) sessions" -ForegroundColor Green
 } else {
-    Write-Host "  ✗ Failed to get session history!" -ForegroundColor Red
+    Write-Host "  âœ— Failed to get session history!" -ForegroundColor Red
 }
 
 Write-Host ""

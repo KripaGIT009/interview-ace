@@ -56,8 +56,10 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
                 
                 // Extract userId from token and add to header
                 Long userId = getUserIdFromToken(token);
+                String userEmail = getEmailFromToken(token);
                 ServerHttpRequest modifiedRequest = exchange.getRequest().mutate()
                         .header("X-User-Id", userId.toString())
+                    .header("X-User-Email", userEmail)
                         .build();
                 
                 ServerWebExchange modifiedExchange = exchange.mutate()
@@ -105,6 +107,16 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
                 .getPayload();
         
         return claims.get("userId", Long.class);
+    }
+
+    private String getEmailFromToken(String token) {
+        Claims claims = Jwts.parser()
+                .verifyWith(getSigningKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+
+        return claims.getSubject();
     }
     
     public static class Config {

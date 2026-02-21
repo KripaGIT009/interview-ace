@@ -226,7 +226,7 @@ export default function QuestionsPage() {
                 <span className="px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-600">
                   {selectedQuestion.category.replace(/_/g, ' ')}
                 </span>
-                <span className="ml-auto text-sm text-gray-500">⏱️ {selectedQuestion.timeLimit} minutes</span>
+                <span className="ml-auto text-sm text-gray-500">Time: {selectedQuestion.timeLimit} minutes</span>
               </div>
 
               <div className="space-y-4">

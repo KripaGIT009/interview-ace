@@ -95,11 +95,10 @@ public class OpenAIService {
                     return 50;
                 });
     }
-}
-
-
     private boolean isApiKeyMissing() {
         return openaiApiKey == null
                 || openaiApiKey.isBlank()
                 || "your-openai-api-key".equals(openaiApiKey);
     }
+
+}
