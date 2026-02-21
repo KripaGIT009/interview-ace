@@ -461,28 +461,28 @@ docker run -p 8081:8081 interviewlabpro/auth-service
 ### Project Structure
 
 ```
-interviewlabpro/
-â”œâ”€â”€ interviewlabpro-backend/
-â”‚   â”œâ”€â”€ eureka-server/         # Service discovery
-â”‚   â”œâ”€â”€ config-server/         # Configuration management
-â”‚   â”œâ”€â”€ api-gateway/           # API Gateway
-â”‚   â”œâ”€â”€ auth-service/          # Authentication
-â”‚   â”œâ”€â”€ question-service/      # Question repository
-â”‚   â”œâ”€â”€ interview-service/     # Session management
-â”‚   â”œâ”€â”€ user-service/          # User progress
-â”‚   â”œâ”€â”€ ai-service/            # AI integration
-â”‚   â””â”€â”€ payment-service/       # Stripe payments
-â”œâ”€â”€ interviewlabpro-frontend/
-â”‚   â”œâ”€â”€ src/
-â”‚   â”‚   â”œâ”€â”€ pages/             # React pages
-â”‚   â”‚   â”œâ”€â”€ services/          # API services
-â”‚   â”‚   â”œâ”€â”€ store/             # Zustand state
-â”‚   â”‚   â””â”€â”€ lib/               # Utilities
-â”‚   â””â”€â”€ package.json
-â”œâ”€â”€ docker-compose.yml         # Docker orchestration
-â”œâ”€â”€ start-microservices.ps1    # Start script
-â”œâ”€â”€ stop-microservices.ps1     # Stop script
-â””â”€â”€ README.md                  # This file
+interviewace/
+├── interviewace-backend/
+│   ├── eureka-server/         # Service discovery
+│   ├── config-server/         # Configuration management
+│   ├── api-gateway/           # API Gateway
+│   ├── auth-service/          # Authentication
+│   ├── question-service/      # Question repository
+│   ├── interview-service/     # Session management
+│   ├── user-service/          # User progress
+│   ├── ai-service/            # AI integration
+│   └── payment-service/       # Stripe payments
+├── interviewace-frontend/
+│   ├── src/
+│   │   ├── pages/             # React pages
+│   │   ├── services/          # API services
+│   │   ├── store/             # Zustand state
+│   │   └── lib/               # Utilities
+│   └── package.json
+├── docker-compose.yml         # Docker orchestration
+├── start-microservices.ps1    # Start script
+├── stop-microservices.ps1     # Stop script
+└── README.md                  # This file
 ```
 
 ### Adding a New Service
@@ -559,7 +559,7 @@ MIT License - see LICENSE file for details
 
 ---
 
-**Built with â¤ï¸ by the InterviewLabPro Team**
+**Built with ❤️ by the InterviewAce Team**
 | **H2 Console** | http://localhost:8080/h2-console | Database Management |
 
 ### H2 Database Console
@@ -667,16 +667,16 @@ See [PROJECT_OVERVIEW.md](PROJECT_OVERVIEW.md) for detailed schema.
 
 ### Project Structure
 ```
-interviewlabpro/
-â”œâ”€â”€ src/main/java/              # Backend (Spring Boot)
-â”œâ”€â”€ src/main/resources/         # Backend resources
-â”œâ”€â”€ frontend-service/           # Frontend (Node.js)
-â”‚   â”œâ”€â”€ public/                 # Static files (HTML/CSS/JS)
-â”‚   â”œâ”€â”€ server.js               # Express server
-â”‚   â””â”€â”€ package.json            # Dependencies
-â”œâ”€â”€ start-all.ps1               # Start both services
-â”œâ”€â”€ stop-all.ps1                # Stop both services
-â””â”€â”€ pom.xml                     # Maven config
+interviewace/
+├── src/main/java/              # Backend (Spring Boot)
+├── src/main/resources/         # Backend resources
+├── frontend-service/           # Frontend (Node.js)
+│   ├── public/                 # Static files (HTML/CSS/JS)
+│   ├── server.js               # Express server
+│   └── package.json            # Dependencies
+├── start-all.ps1               # Start both services
+├── stop-all.ps1                # Stop both services
+└── pom.xml                     # Maven config
 ```
 
 ### Running Tests
