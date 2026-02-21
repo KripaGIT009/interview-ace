@@ -15,6 +15,8 @@ import java.time.LocalDateTime;
 @Service
 @RequiredArgsConstructor
 public class PaymentService {
+
+    private static final String LOCAL_STRIPE_CUSTOMER_PREFIX = "local_customer_";
     
     private final SubscriptionRepository subscriptionRepository;
     
@@ -23,6 +25,9 @@ public class PaymentService {
     
     @Value("${stripe.prices.enterprise}")
     private String enterprisePriceId;
+
+    @Value("${stripe.api.key:}")
+    private String stripeApiKey;
     
     public Subscription getOrCreateSubscription(Long userId, String userEmail) throws StripeException {
         return subscriptionRepository.findByUserId(userId)
@@ -31,6 +36,16 @@ public class PaymentService {
     
     @Transactional
     public Subscription createFreeSubscription(Long userId, String userEmail) {
+        if (!isStripeConfigured()) {
+            Subscription subscription = new Subscription();
+            subscription.setUserId(userId);
+            subscription.setStripeCustomerId(buildLocalStripeCustomerId(userId));
+            subscription.setTier(Subscription.SubscriptionTier.FREE);
+            subscription.setStatus(Subscription.SubscriptionStatus.ACTIVE);
+            subscription.setCreatedAt(LocalDateTime.now());
+            return subscriptionRepository.save(subscription);
+        }
+
         try {
             // Create Stripe customer
             CustomerCreateParams params = CustomerCreateParams.builder()
@@ -53,9 +68,25 @@ public class PaymentService {
         }
     }
     
-    public String createCheckoutSession(Long userId, String tier, String successUrl, String cancelUrl) throws StripeException {
-        Subscription subscription = subscriptionRepository.findByUserId(userId)
-                .orElseThrow(() -> new RuntimeException("Subscription not found"));
+    public String createCheckoutSession(Long userId, String userEmail, String tier, String successUrl, String cancelUrl) throws StripeException {
+        if (!isStripeConfigured()) {
+            throw new RuntimeException("Stripe is not configured. Please set STRIPE_SECRET_KEY.");
+        }
+
+        Subscription subscription = getOrCreateSubscription(userId, userEmail);
+
+        if (subscription.getStripeCustomerId() == null
+                || subscription.getStripeCustomerId().isBlank()
+                || isLocalStripeCustomerId(subscription.getStripeCustomerId())) {
+            CustomerCreateParams customerParams = CustomerCreateParams.builder()
+                    .setEmail(userEmail)
+                    .setMetadata(java.util.Map.of("userId", userId.toString()))
+                    .build();
+            Customer customer = Customer.create(customerParams);
+            subscription.setStripeCustomerId(customer.getId());
+            subscription.setUpdatedAt(LocalDateTime.now());
+            subscriptionRepository.save(subscription);
+        }
         
         String priceId = tier.equalsIgnoreCase("PRO") ? proPriceId : enterprisePriceId;
         
@@ -74,6 +105,20 @@ public class PaymentService {
         
         com.stripe.model.checkout.Session session = com.stripe.model.checkout.Session.create(params);
         return session.getUrl();
+    }
+
+    private boolean isStripeConfigured() {
+        return stripeApiKey != null
+                && !stripeApiKey.isBlank()
+                && !stripeApiKey.equals("sk_test_your_stripe_secret_key");
+    }
+
+    private String buildLocalStripeCustomerId(Long userId) {
+        return LOCAL_STRIPE_CUSTOMER_PREFIX + userId;
+    }
+
+    private boolean isLocalStripeCustomerId(String stripeCustomerId) {
+        return stripeCustomerId != null && stripeCustomerId.startsWith(LOCAL_STRIPE_CUSTOMER_PREFIX);
     }
     
     @Transactional

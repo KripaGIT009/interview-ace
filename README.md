@@ -5,50 +5,50 @@
 [![React](https://img.shields.io/badge/React-18-blue.svg)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue.svg)](https://www.typescriptlang.org/)
 
-## 🎯 Overview
+## ðŸŽ¯ Overview
 
 InterviewLabPro is an enterprise-grade AI-powered interview practice platform built with **microservices architecture**. It helps developers prepare for technical coding interviews through mock sessions with instant AI feedback powered by GPT-4.
 
 ### Key Features
-- 🔐 **JWT Authentication** - Secure user authentication and authorization
-- 💻 **Monaco Code Editor** - VS Code-quality editing experience with syntax highlighting
-- 🎤 **Voice Recording** - RecordRTC integration for recording explanations
-- 🤖 **AI Feedback** - GPT-4 powered code analysis and scoring (0-100)
-- 📊 **Progress Tracking** - Real-time analytics, streaks, and performance metrics
-- 💳 **Stripe Payments** - Subscription management (Free, Pro $29/mo, Enterprise $99/mo)
-- 📈 **Analytics Dashboard** - Track completion rates, average scores, and session history
-- 🎯 **400+ Questions** - Curated coding challenges with difficulty levels and categories
+- ðŸ” **JWT Authentication** - Secure user authentication and authorization
+- ðŸ’» **Monaco Code Editor** - VS Code-quality editing experience with syntax highlighting
+- ðŸŽ¤ **Voice Recording** - RecordRTC integration for recording explanations
+- ðŸ¤– **AI Feedback** - GPT-4 powered code analysis and scoring (0-100)
+- ðŸ“Š **Progress Tracking** - Real-time analytics, streaks, and performance metrics
+- ðŸ’³ **Stripe Payments** - Subscription management (Free, Pro $29/mo, Enterprise $99/mo)
+- ðŸ“ˆ **Analytics Dashboard** - Track completion rates, average scores, and session history
+- ðŸŽ¯ **400+ Questions** - Curated coding challenges with difficulty levels and categories
 
 ---
 
-## 🏗️ Architecture
+## ðŸ—ï¸ Architecture
 
 ### Microservices Overview
 
 ```
-┌──────────────────────────────────────────────────────────────────┐
-│                    React Frontend (Port 3000)                     │
-│         TypeScript • TailwindCSS • Monaco Editor • Zustand       │
-└────────────────────────────┬─────────────────────────────────────┘
-                             │ HTTP/REST
-                             ▼
-┌──────────────────────────────────────────────────────────────────┐
-│                   API Gateway (Port 8080)                         │
-│          JWT Validation • Routing • Rate Limiting                │
-└────────────────────────────┬─────────────────────────────────────┘
-                             │
-                             ▼
-┌──────────────────────────────────────────────────────────────────┐
-│                Eureka Server (Port 8761)                          │
-│              Service Discovery • Health Checks                    │
-└─────┬────────────────────────────────────────────────────────────┘
-      │
-      ├──▶ Auth Service (8081)        - User authentication & JWT
-      ├──▶ Question Service (8082)    - Question repository (400+)
-      ├──▶ Interview Service (8083)   - Session management & timing
-      ├──▶ User Service (8084)        - Progress tracking & streaks
-      ├──▶ AI Service (8085)          - GPT-4 feedback & scoring
-      └──▶ Payment Service (8086)     - Stripe subscriptions
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚                    React Frontend (Port 3000)                     â”‚
+â”‚         TypeScript â€¢ TailwindCSS â€¢ Monaco Editor â€¢ Zustand       â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+                             â”‚ HTTP/REST
+                             â–¼
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚                   API Gateway (Port 8080)                         â”‚
+â”‚          JWT Validation â€¢ Routing â€¢ Rate Limiting                â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+                             â”‚
+                             â–¼
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚                Eureka Server (Port 8761)                          â”‚
+â”‚              Service Discovery â€¢ Health Checks                    â”‚
+â””â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+      â”‚
+      â”œâ”€â”€â–¶ Auth Service (8081)        - User authentication & JWT
+      â”œâ”€â”€â–¶ Question Service (8082)    - Question repository (400+)
+      â”œâ”€â”€â–¶ Interview Service (8083)   - Session management & timing
+      â”œâ”€â”€â–¶ User Service (8084)        - Progress tracking & streaks
+      â”œâ”€â”€â–¶ AI Service (8085)          - GPT-4 feedback & scoring
+      â””â”€â”€â–¶ Payment Service (8086)     - Stripe subscriptions
 ```
 
 ### Technology Stack
@@ -79,7 +79,7 @@ InterviewLabPro is an enterprise-grade AI-powered interview practice platform bu
 
 ---
 
-## 🚀 Quick Start
+## ðŸš€ Quick Start
 
 ### Prerequisites
 - **Java 17+** ([Download](https://www.oracle.com/java/technologies/downloads/))
@@ -124,7 +124,7 @@ All 6 business services should show as **UP** (green)
 
 ---
 
-## 📦 Service Details
+## ðŸ“¦ Service Details
 
 ### Infrastructure Services
 
@@ -141,12 +141,12 @@ All 6 business services should show as **UP** (green)
 #### API Gateway (8080)
 - Single entry point for all requests
 - JWT token validation
-- Route `/api/auth/**` → Auth Service
-- Route `/api/questions/**` → Question Service
-- Route `/api/interviews/**` → Interview Service
-- Route `/api/users/**` → User Service
-- Route `/api/ai/**` → AI Service
-- Route `/api/payments/**` → Payment Service
+- Route `/api/auth/**` â†’ Auth Service
+- Route `/api/questions/**` â†’ Question Service
+- Route `/api/interviews/**` â†’ Interview Service
+- Route `/api/users/**` â†’ User Service
+- Route `/api/ai/**` â†’ AI Service
+- Route `/api/payments/**` â†’ Payment Service
 
 ### Business Services
 
@@ -208,7 +208,7 @@ All 6 business services should show as **UP** (green)
 
 ---
 
-## 🎨 Frontend Pages
+## ðŸŽ¨ Frontend Pages
 
 ### 1. QuestionsPage
 - **Search & Filter**: Text search, difficulty (Easy/Medium/Hard), 17 categories
@@ -221,7 +221,7 @@ All 6 business services should show as **UP** (green)
 - **Monaco Editor**: Full-featured code editor (vs-dark theme, 500px)
 - **Audio Recording**: RecordRTC microphone integration
 - **AI Workflow**:
-  1. Submit code → GPT-4 analysis
+  1. Submit code â†’ GPT-4 analysis
   2. Get score (0-100)
   3. Display detailed feedback
   4. Update user progress
@@ -240,7 +240,7 @@ All 6 business services should show as **UP** (green)
 
 ---
 
-## 🔧 Configuration
+## ðŸ”§ Configuration
 
 ### 1. Environment Variables
 
@@ -283,7 +283,7 @@ const tiers = [
 
 ---
 
-## 🧪 Testing
+## ðŸ§ª Testing
 
 ### API Testing Script
 
@@ -293,20 +293,20 @@ const tiers = [
 ```
 
 This tests:
-- ✅ User signup
-- ✅ User login
-- ✅ Get questions
-- ✅ Start interview session
-- ✅ Submit code
-- ✅ Get AI feedback
-- ✅ Get user progress
+- âœ… User signup
+- âœ… User login
+- âœ… Get questions
+- âœ… Start interview session
+- âœ… Submit code
+- âœ… Get AI feedback
+- âœ… Get user progress
 
 ### Manual Testing Flow
 
 1. **Sign Up**: http://localhost:3000/signup
 2. **Login**: Use new credentials
 3. **Browse Questions**: Filter by difficulty/category
-4. **Start Interview**: Click question → Start Interview
+4. **Start Interview**: Click question â†’ Start Interview
 5. **Code Solution**: Edit in Monaco Editor
 6. **Submit**: Get AI feedback and score
 7. **Dashboard**: View progress and stats
@@ -314,7 +314,7 @@ This tests:
 
 ---
 
-## 📊 API Reference
+## ðŸ“Š API Reference
 
 ### Authentication
 
@@ -391,7 +391,7 @@ Response: { "feedback": "Excellent solution using..." }
 
 ---
 
-## 🐳 Docker Deployment
+## ðŸ³ Docker Deployment
 
 ### Build & Run with Docker Compose
 
@@ -409,6 +409,43 @@ docker-compose logs -f
 docker-compose down
 ```
 
+### pgAdmin (PostgreSQL UI)
+
+```powershell
+# Start PostgreSQL + pgAdmin
+docker compose up -d postgres pgadmin
+```
+
+- **URL**: http://localhost:5050
+- **Email**: `admin@interviewlabpro.com`
+- **Password**: `interviewlabpro123`
+- **Preloaded databases**: `auth_db`, `questions_db`, `interviews_db`, `users_db`, `payments_db`
+
+> You can override login credentials with `PGADMIN_DEFAULT_EMAIL` and `PGADMIN_DEFAULT_PASSWORD` in your environment.
+
+#### Troubleshooting pgAdmin
+
+- **Port 5050 already in use**
+  ```powershell
+  docker ps --format "table {{.Names}}\t{{.Ports}}"
+  # change mapping in docker-compose.yml, e.g. "5051:80"
+  docker compose up -d pgadmin
+  ```
+
+- **Container not healthy/running**
+  ```powershell
+  docker compose ps postgres pgadmin
+  docker compose logs --tail=100 postgres pgadmin
+  ```
+
+- **Reset pgAdmin admin password**
+  ```powershell
+  docker compose down pgadmin
+  docker rm -f interviewlabpro-pgadmin
+  $env:PGADMIN_DEFAULT_PASSWORD="newStrongPassword123"
+  docker compose up -d pgadmin
+  ```
+
 ### Individual Service Build
 
 ```powershell
@@ -419,13 +456,13 @@ docker run -p 8081:8081 interviewlabpro/auth-service
 
 ---
 
-## 🛠️ Development
+## ðŸ› ï¸ Development
 
 ### Project Structure
 
 ```
-interviewlabpro/
-├── interviewlabpro-backend/
+interviewace/
+├── interviewace-backend/
 │   ├── eureka-server/         # Service discovery
 │   ├── config-server/         # Configuration management
 │   ├── api-gateway/           # API Gateway
@@ -435,7 +472,7 @@ interviewlabpro/
 │   ├── user-service/          # User progress
 │   ├── ai-service/            # AI integration
 │   └── payment-service/       # Stripe payments
-├── interviewlabpro-frontend/
+├── interviewace-frontend/
 │   ├── src/
 │   │   ├── pages/             # React pages
 │   │   ├── services/          # API services
@@ -459,9 +496,9 @@ interviewlabpro/
 
 ---
 
-## 🎯 Roadmap
+## ðŸŽ¯ Roadmap
 
-### Completed ✅
+### Completed âœ…
 - [x] Microservices architecture (9 services)
 - [x] JWT authentication
 - [x] React frontend with TypeScript
@@ -471,13 +508,13 @@ interviewlabpro/
 - [x] Progress tracking & analytics
 - [x] Audio recording (RecordRTC)
 
-### In Progress 🚧
+### In Progress ðŸš§
 - [ ] Audio transcription (Whisper API)
 - [ ] Charts for dashboard (Chart.js installed)
 - [ ] Code execution with Judge0 API
 - [ ] Real-time AI feedback (WebSocket)
 
-### Future 🔮
+### Future ðŸ”®
 - [ ] Mobile app (React Native)
 - [ ] Video recording
 - [ ] Peer-to-peer mock interviews
@@ -488,13 +525,13 @@ interviewlabpro/
 
 ---
 
-## 📝 License
+## ðŸ“ License
 
 MIT License - see LICENSE file for details
 
 ---
 
-## 🤝 Contributing
+## ðŸ¤ Contributing
 
 1. Fork the repository
 2. Create feature branch (`git checkout -b feature/AmazingFeature`)
@@ -504,7 +541,7 @@ MIT License - see LICENSE file for details
 
 ---
 
-## 📞 Support
+## ðŸ“ž Support
 
 - **Issues**: https://github.com/yourusername/interviewlabpro/issues
 - **Email**: support@interviewlabpro.com
@@ -512,7 +549,7 @@ MIT License - see LICENSE file for details
 
 ---
 
-## 🙏 Acknowledgments
+## ðŸ™ Acknowledgments
 
 - Spring Boot Team for excellent microservices framework
 - OpenAI for GPT-4 API
@@ -522,7 +559,7 @@ MIT License - see LICENSE file for details
 
 ---
 
-**Built with ❤️ by the InterviewLabPro Team**
+**Built with ❤️ by the InterviewAce Team**
 | **H2 Console** | http://localhost:8080/h2-console | Database Management |
 
 ### H2 Database Console
@@ -530,7 +567,7 @@ MIT License - see LICENSE file for details
 - **Username**: `sa`
 - **Password**: (leave empty)
 
-## 📡 API Endpoints
+## ðŸ“¡ API Endpoints
 
 ### Authentication
 - `POST /api/auth/signup` - Register new user
@@ -555,7 +592,7 @@ MIT License - see LICENSE file for details
 ### User
 - `GET /api/users/{userId}/progress` - Get user progress statistics
 
-## 📱 User Interface Pages
+## ðŸ“± User Interface Pages
 
 The frontend service provides the following pages:
 
@@ -566,7 +603,7 @@ The frontend service provides the following pages:
 - **Questions** (`/questions.html`) - Browse and filter questions
 - **Interview** (`/interview.html`) - Live coding interface with timer
 
-## 🧪 Testing the Application
+## ðŸ§ª Testing the Application
 
 ### Complete User Flow
 
@@ -603,7 +640,7 @@ Invoke-RestMethod -Uri "http://localhost:8080/api/questions"
 
 ## Database Schema
 
-###🗄️ Database Schema
+###ðŸ—„ï¸ Database Schema
 
 ### Core Tables
 - **users** - User accounts and authentication
@@ -614,7 +651,7 @@ Invoke-RestMethod -Uri "http://localhost:8080/api/questions"
 
 See [PROJECT_OVERVIEW.md](PROJECT_OVERVIEW.md) for detailed schema.
 
-## 💳Tier | Price | Features |
+## ðŸ’³Tier | Price | Features |
 |------|-------|----------|
 | FREE | $0 | 3 interviews/month, basic feedback |
 | PREMIUM | $29/month | Unlimited interviews, detailed feedback, progress tracking |
@@ -626,11 +663,11 @@ See [PROJECT_OVERVIEW.md](PROJECT_OVERVIEW.md) for detailed schema.
 | **PREMIUM** | $29/month | Unlimited interviews, detailed AI feedback, analytics |
 | **ENTERPRISE** | Custom | Team management, custom questions, dedicated support |
 
-## 🛠️ Development
+## ðŸ› ï¸ Development
 
 ### Project Structure
 ```
-interviewlabpro/
+interviewace/
 ├── src/main/java/              # Backend (Spring Boot)
 ├── src/main/resources/         # Backend resources
 ├── frontend-service/           # Frontend (Node.js)
@@ -661,7 +698,7 @@ cd frontend-service
 npm install --production
 ```
 
-## 📚 Documentation
+## ðŸ“š Documentation
 
 - **[MICROSERVICES_GUIDE.md](MICROSERVICES_GUIDE.md)** - Microservices architecture details
 - **[PROJECT_OVERVIEW.md](PROJECT_OVERVIEW.md)** - Complete project documentation
@@ -669,7 +706,7 @@ npm install --production
 - **[API_TESTING.md](API_TESTING.md)** - API endpoint documentation
 - **[Frontend README](frontend-service/README.md)** - Frontend service details
 
-## 🚢 Deployment
+## ðŸš¢ Deployment
 
 ### Frontend Deployment
 - Deploy to Heroku, Azure App Service, or AWS
@@ -682,7 +719,7 @@ npm install --production
 - Configure database (PostgreSQL for production)
 - Set JWT_SECRET environment variable
 
-## 🔒 Security
+## ðŸ”’ Security
 
 - JWT-based authentication (24-hour expiration)
 - BCrypt password hashing
@@ -690,7 +727,7 @@ npm install --production
 - SQL injection prevention (JPA)
 - XSS protection headers
 
-## 🤝 Contributing
+## ðŸ¤ Contributing
 
 1. Fork the repository
 2. Create a feature branch
@@ -698,13 +735,13 @@ npm install --production
 4. Test thoroughly
 5. Submit a pull request
 
-## 📝 License
+## ðŸ“ License
 
 This project is for educational purposes.
 
 ---
 
-**Built with ❤️ for interview success**JWT_EXPIRATION` - Token expiration time in milliseconds
+**Built with â¤ï¸ for interview success**JWT_EXPIRATION` - Token expiration time in milliseconds
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
@@ -717,4 +754,4 @@ For support, email support@interviewlabpro.com
 
 ---
 
-Built with ❤️ by developers, for developers
+Built with â¤ï¸ by developers, for developers

@@ -34,7 +34,7 @@ export default function LandingPage() {
 
         <div className="grid md:grid-cols-3 gap-8 mt-20">
           <div className="bg-white p-6 rounded-xl shadow-lg">
-            <div className="text-4xl mb-4">🎤</div>
+            <div className="text-2xl font-bold text-gray-400 mb-4">VOICE</div>
             <h3 className="text-xl font-bold mb-2">Voice Interviews</h3>
             <p className="text-gray-600">
               Practice with real voice interaction powered by AI
@@ -42,7 +42,7 @@ export default function LandingPage() {
           </div>
           
           <div className="bg-white p-6 rounded-xl shadow-lg">
-            <div className="text-4xl mb-4">🤖</div>
+            <div className="text-2xl font-bold text-gray-400 mb-4">AI</div>
             <h3 className="text-xl font-bold mb-2">AI Feedback</h3>
             <p className="text-gray-600">
               Get instant, detailed feedback on your solutions
@@ -50,7 +50,7 @@ export default function LandingPage() {
           </div>
           
           <div className="bg-white p-6 rounded-xl shadow-lg">
-            <div className="text-4xl mb-4">📊</div>
+            <div className="text-2xl font-bold text-gray-400 mb-4">STATS</div>
             <h3 className="text-xl font-bold mb-2">Track Progress</h3>
             <p className="text-gray-600">
               Monitor your improvement with detailed analytics

@@ -26,13 +26,14 @@ public class PaymentController {
     @PostMapping("/checkout")
     public ResponseEntity<Map<String, String>> createCheckoutSession(
             @RequestHeader("X-User-Id") Long userId,
+            @RequestHeader("X-User-Email") String userEmail,
             @RequestBody Map<String, String> request) throws StripeException {
         
         String tier = request.get("tier");
         String successUrl = request.get("successUrl");
         String cancelUrl = request.get("cancelUrl");
         
-        String checkoutUrl = paymentService.createCheckoutSession(userId, tier, successUrl, cancelUrl);
+        String checkoutUrl = paymentService.createCheckoutSession(userId, userEmail, tier, successUrl, cancelUrl);
         return ResponseEntity.ok(Map.of("url", checkoutUrl));
     }
     

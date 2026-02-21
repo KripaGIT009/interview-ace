@@ -1,0 +1,15 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "InterviewLabPro",
+      "Group": "InterviewLabPro",
+      "Host": "interviewlabpro-postgres",
+      "Port": 5432,
+      "MaintenanceDB": "postgres",
+      "Username": "interviewlabpro",
+      "Password": "interviewlabpro123",
+      "SavePassword": true,
+      "SSLMode": "prefer"
+    }
+  }
+}

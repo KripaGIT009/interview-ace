@@ -255,7 +255,7 @@ export default function InterviewPage() {
               <div className={`text-2xl font-mono font-bold ${
                 timeLeft < 300 ? 'text-red-600' : 'text-gray-700'
               }`}>
-                ⏱️ {formatTime(timeLeft)}
+                Time: {formatTime(timeLeft)}
               </div>
               <button
                 onClick={recording ? stopRecording : startRecording}
@@ -265,7 +265,7 @@ export default function InterviewPage() {
                     : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                 }`}
               >
-                {recording ? '⏹️ Stop Recording' : '🎤 Start Recording'}
+                {recording ? 'Stop Recording' : 'Start Recording'}
               </button>
             </div>
           </div>

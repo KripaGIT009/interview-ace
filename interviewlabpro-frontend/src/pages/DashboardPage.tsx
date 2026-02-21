@@ -96,7 +96,7 @@ export default function DashboardPage() {
                 <h3 className="text-sm font-medium text-gray-600 mb-1">Total Sessions</h3>
                 <p className="text-3xl font-bold text-indigo-600">{progress?.totalSessions || 0}</p>
               </div>
-              <div className="text-4xl">📊</div>
+              <div className="text-2xl font-bold text-gray-400">TS</div>
             </div>
           </div>
           
@@ -106,7 +106,7 @@ export default function DashboardPage() {
                 <h3 className="text-sm font-medium text-gray-600 mb-1">Completed</h3>
                 <p className="text-3xl font-bold text-green-600">{progress?.completedSessions || 0}</p>
               </div>
-              <div className="text-4xl">✅</div>
+              <div className="text-2xl font-bold text-gray-400">OK</div>
             </div>
           </div>
           
@@ -118,7 +118,7 @@ export default function DashboardPage() {
                   {progress?.averageScore ? Math.round(progress.averageScore) : '-'}
                 </p>
               </div>
-              <div className="text-4xl">🎯</div>
+              <div className="text-2xl font-bold text-gray-400">AVG</div>
             </div>
           </div>
           
@@ -128,7 +128,7 @@ export default function DashboardPage() {
                 <h3 className="text-sm font-medium text-gray-600 mb-1">Current Streak</h3>
                 <p className="text-3xl font-bold text-orange-600">{progress?.currentStreak || 0} days</p>
               </div>
-              <div className="text-4xl">🔥</div>
+              <div className="text-2xl font-bold text-gray-400">STK</div>
             </div>
           </div>
         </div>
@@ -189,7 +189,7 @@ export default function DashboardPage() {
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-gray-700">Longest Streak</span>
-                <span className="text-lg font-bold text-orange-600">{progress?.longestStreak || 0} days 🏆</span>
+                <span className="text-lg font-bold text-orange-600">{progress?.longestStreak || 0} days</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-gray-700">Completion Rate</span>
@@ -251,7 +251,7 @@ export default function DashboardPage() {
             to="/questions" 
             className="inline-block bg-indigo-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-indigo-700 transition text-lg shadow-lg"
           >
-            🚀 Start New Interview
+            Start New Interview
           </Link>
         </div>
       </main>
